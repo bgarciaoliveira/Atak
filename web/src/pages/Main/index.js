@@ -11,6 +11,9 @@ export default class Main extends Component {
         //Keyword da caixa de pesquisa
         keyword: '',
 
+        buttonGoogleDisabled: false,
+        buttonBingDisabled: false,        
+
         search: {
 
             //Keyword utilizada na pesquisa
@@ -27,11 +30,15 @@ export default class Main extends Component {
 
             //Resultados da pesquisa
             results: [],
+
+            // Action buttons
+            previousDisabled: false,
+            nextDisabled: false,
         }
     }
 
     handleChange(e) {
-        this.setState({ keyword: e.target.value });
+        this.setState({ keyword: e.target.value })
     }
 
     resetSearch = () => {
@@ -43,6 +50,8 @@ export default class Main extends Component {
                 count: -1,
                 page: 0,
                 results: [],
+                previousEnabled: false,
+                nextEnabled: false
             }
         })
     }
@@ -55,6 +64,12 @@ export default class Main extends Component {
             this.resetSearch()
         }
         else{
+
+            this.setState({
+                buttonGoogleDisabled: true,
+                buttonBingDisabled: true
+            })
+
             const response = await api.get(`/search?keyword=${this.state.keyword}&engine=google&first=1`)
 
             if(response.status === 200 || response.status === 204){
@@ -72,6 +87,11 @@ export default class Main extends Component {
             }else{
                 this.resetSearch()
             }
+
+            this.setState({
+                buttonGoogleDisabled: false,
+                buttonBingDisabled: false
+            })
         }
     }
 
@@ -83,6 +103,12 @@ export default class Main extends Component {
             this.resetSearch()
         }
         else{
+
+            this.setState({
+                buttonGoogleDisabled: true,
+                buttonBingDisabled: true
+            })
+
             const response = await api.get(`/search?keyword=${this.state.keyword}&engine=bing&first=1`)
 
             if(response.status === 200 || response.status === 204){
@@ -100,6 +126,11 @@ export default class Main extends Component {
             }else{
                 this.resetSearch()
             }
+
+            this.setState({
+                buttonGoogleDisabled: false,
+                buttonBingDisabled: false
+            })
         }
     }
 
@@ -114,7 +145,16 @@ export default class Main extends Component {
     }
 
     previousPage = async () => {
+
         if(this.state.search.page === 1) return
+
+        this.setState({
+            search: {
+                ...this.state.search,
+                previousDisabled: true,
+                nextDisabled: true
+            }
+        })
 
         const first = this.calculateFirst(this.state.search.page -1)
 
@@ -133,10 +173,26 @@ export default class Main extends Component {
         }else{
             this.resetSearch()
         }
+
+        this.setState({
+            search: {
+                ...this.state.search,
+                previousDisabled: false,
+                nextDisabled: false
+            }
+        })
     }
 
     nextPage = async () => {
         if(this.state.search.page >= this.calculateMaxPage()) return
+
+        this.setState({
+            search: {
+                ...this.state.search,
+                previousDisabled: true,
+                nextDisabled: true
+            }
+        })
 
         const first = this.calculateFirst(this.state.search.page + 1)
 
@@ -155,6 +211,14 @@ export default class Main extends Component {
         }else{
             this.resetSearch()
         }
+
+        this.setState({
+            search: {
+                ...this.state.search,
+                previousDisabled: false,
+                nextDisabled: false
+            }
+        })
     }
 
     render() {
@@ -167,8 +231,8 @@ export default class Main extends Component {
                             <input type="text" className="keyword-input" placeholder="Digite sua pesquisa e clique no motor de buscas desejado" value={this.state.keyword} onChange={this.handleChange.bind(this)} />
 
                             <div className="button-box">
-                                <input type="button" className="google-button" value="Google" onClick={this.googleOnClick} />
-                                <input type="button" className="bing-button" value="Bing!" onClick={this.bingOnClick} />
+                                <input type="button" disabled={this.state.buttonGoogleDisabled} className="google-button" value="Google" onClick={this.googleOnClick} />
+                                <input type="button" disabled={this.state.buttonBingDisabled} className="bing-button" value="Bing!" onClick={this.bingOnClick} />
                             </div>
                         </form>
                     </div>
@@ -177,7 +241,7 @@ export default class Main extends Component {
                 {this.state.search.count !== -1 ? (
                     <div className="result-box">
 
-                        {this.state.search.count === 0 || this.state.search.results.length === 0 ? (
+                        {this.state.search.count === 0 ? (
 
                             <h3>Não há resultados para '{this.state.search.keyword}' em {this.state.search.engine}</h3>
 
@@ -188,7 +252,7 @@ export default class Main extends Component {
 
                                 {this.state.search.results.map((result, index) => {
                                     return (
-                                        <article key={index}>
+                                        <article key={index}>                                        
                                             <strong>{result.title}</strong>                                        
                                             <a href={result.link} target="_blank" rel="noopener noreferrer">Acessar</a>
                                         </article>
@@ -196,9 +260,9 @@ export default class Main extends Component {
                                 })}
 
                                 <div className="actions">
-                                    <button onClick={this.previousPage}>Anterior</button>
+                                    <button disabled={this.state.search.previousDisabled} onClick={this.previousPage}>Anterior</button>
                                     <span>Pagina atual: {this.state.search.page}</span>
-                                    <button onClick={this.nextPage}>Proxima</button>
+                                    <button disabled={this.state.search.nextDisabled} onClick={this.nextPage}>Proxima</button>   
                                 </div>
 
                             </div>
