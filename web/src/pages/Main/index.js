@@ -144,6 +144,10 @@ export default class Main extends Component {
         return parseInt(this.state.search.count / 10)
     }
 
+    getBrLocaleNumber = (number) => {
+        return Number(number).toLocaleString('pt-BR')
+    }
+
     previousPage = async () => {
 
         if(this.state.search.page === 1) return
@@ -248,7 +252,7 @@ export default class Main extends Component {
                         ) : (
                             <div>
                                 <h3>Mostrando resultados para {this.state.search.keyword} em {this.state.search.engine}</h3>
-                                <h6>Aproximadamente {this.state.search.count} resultados</h6> 
+                                <h6>Aproximadamente {this.getBrLocaleNumber(this.state.search.count)} resultados</h6> 
 
                                 {this.state.search.results.map((result, index) => {
                                     return (
