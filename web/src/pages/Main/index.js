@@ -25,6 +25,7 @@ export default class Main extends Component {
                 <div className="result-box">
 
                     <h3>Mostrando resultados para Bruno Garcia em Google</h3>
+                    <h6>Aproximadamente 160.000.000 resultados</h6>
 
                     <article key="1">
                         <strong>Bruno Garcia</strong>
@@ -45,6 +46,42 @@ export default class Main extends Component {
                         <strong>Bruno Garcia</strong>
                         <a href="http://google.com" target="_blank" rel="noopener noreferrer">Acessar</a>
                     </article>
+
+                    <article key="1">
+                        <strong>Bruno Garcia</strong>
+                        <a href="http://google.com" target="_blank" rel="noopener noreferrer">Acessar</a>
+                    </article>
+
+                    <article key="2">
+                        <strong>Bruno Garcia</strong>
+                        <a href="http://google.com" target="_blank" rel="noopener noreferrer">Acessar</a>
+                    </article>
+
+                    <article key="3">
+                        <strong>Bruno Garcia</strong>
+                        <a href="http://google.com" target="_blank" rel="noopener noreferrer">Acessar</a>
+                    </article>
+
+                    <article key="4">
+                        <strong>Bruno Garcia</strong>
+                        <a href="http://google.com" target="_blank" rel="noopener noreferrer">Acessar</a>
+                    </article>
+
+                    <article key="3">
+                        <strong>Bruno Garcia</strong>
+                        <a href="http://google.com" target="_blank" rel="noopener noreferrer">Acessar</a>
+                    </article>
+
+                    <article key="4">
+                        <strong>Bruno Garcia</strong>
+                        <a href="http://google.com" target="_blank" rel="noopener noreferrer">Acessar</a>
+                    </article>
+
+                    <div className="actions">
+                        <button>Anterior</button>
+                        <span>Pagina atual: 1</span>
+                        <button>Proxima</button>
+                    </div>
 
                 </div>
 
