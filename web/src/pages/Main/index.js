@@ -231,7 +231,16 @@ export default class Main extends Component {
                 <div className="search-box">
                     <div className="content">
                         <form>
-                            <input type="text" className="keyword-input" placeholder="Digite sua pesquisa e clique no motor de buscas desejado" value={this.state.keyword} onChange={this.handleChange.bind(this)} />
+                            <input type="text" className="keyword-input" placeholder="Digite sua pesquisa e clique no motor de buscas desejado"
+                            value={this.state.keyword}
+                            onChange={this.handleChange.bind(this)} 
+                            onKeyPress={e => { 
+                                if (e.key === 'Enter') {
+                                    e.preventDefault()
+                                    this.googleOnClick()
+                                }
+                            }}
+                            />
 
                             <div className="button-box">
                                 <input type="button" disabled={this.state.buttonGoogleDisabled} className="google-button" value="Google" onClick={this.googleOnClick} />

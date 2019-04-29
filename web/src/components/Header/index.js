@@ -6,6 +6,4 @@ const Header = () => (
     <header id="main-header">BSearch</header>
 )
 
-
-
 export default Header
