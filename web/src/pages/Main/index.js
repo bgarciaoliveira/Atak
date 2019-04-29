@@ -250,7 +250,7 @@ export default class Main extends Component {
 
                         ) : (
                                 <div>
-                                    <h3>Mostrando resultados para {this.state.search.keyword} em {this.state.search.engine}</h3>
+                                    <h3>Mostrando resultados para <span className="text-orange">{this.state.search.keyword}</span> em <span className="text-orange">{this.state.search.engine}</span></h3>
                                     <h6>Aproximadamente {this.getBrLocaleNumber(this.state.search.count)} resultados</h6>
 
                                     {this.state.search.results.map((result, index) => {
