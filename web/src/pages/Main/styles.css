@@ -60,6 +60,10 @@
     margin-bottom: 10px;
 }
 
+.result-box span{
+    color: #da552f;
+}
+
 .result-box h6{
     text-align: center;
     margin-bottom: 10px;
