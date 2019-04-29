@@ -12,7 +12,7 @@ export default class Main extends Component {
         keyword: '',
 
         buttonGoogleDisabled: false,
-        buttonBingDisabled: false,        
+        buttonBingDisabled: false,
 
         search: {
 
@@ -44,6 +44,8 @@ export default class Main extends Component {
     resetSearch = () => {
 
         this.setState({
+            buttonGoogleDisabled: false,
+            buttonBingDisabled: false,
             search: {
                 keyword: '',
                 engine: '',
@@ -56,86 +58,25 @@ export default class Main extends Component {
         })
     }
 
-    googleOnClick = async () => {
-
-        const keyword = this.state.keyword
-
-        if(keyword === ''){
-            this.resetSearch()
-        }
-        else{
-
-            this.setState({
-                buttonGoogleDisabled: true,
-                buttonBingDisabled: true
-            })
-
-            const response = await api.get(`/search?keyword=${this.state.keyword}&engine=google&first=1`)
-
-            if(response.status === 200 || response.status === 204){
-
-                this.setState({
-                    search: {
-                        keyword,
-                        engine: 'google',
-                        count: response.status === 200 ? response.data.resultStat : 0,
-                        results: response.data.titlesAndLinks,
-                        page: 1
-                    }
-                })
-
-            }else{
-                this.resetSearch()
-            }
-
-            this.setState({
-                buttonGoogleDisabled: false,
-                buttonBingDisabled: false
-            })
-        }
+    setSearchButtonsDisabledStatus = (status) => {
+        this.setState({
+            buttonGoogleDisabled: status,
+            buttonBingDisabled: status
+        })
     }
 
-    bingOnClick = async () => {
-
-        const keyword = this.state.keyword
-
-        if(keyword === ''){
-            this.resetSearch()
-        }
-        else{
-
-            this.setState({
-                buttonGoogleDisabled: true,
-                buttonBingDisabled: true
-            })
-
-            const response = await api.get(`/search?keyword=${this.state.keyword}&engine=bing&first=1`)
-
-            if(response.status === 200 || response.status === 204){
-
-                this.setState({
-                    search: {
-                        keyword,
-                        engine: 'bing',
-                        count: response.status === 200 ? response.data.resultStat : 0,
-                        results: response.data.titlesAndLinks,
-                        page: 1
-                    }
-                })
-
-            }else{
-                this.resetSearch()
+    setActionButtonsDisabledStatus = (status) => {
+        this.setState({
+            search: {
+                ...this.state.search,
+                previousDisabled: status,
+                nextDisabled: status
             }
-
-            this.setState({
-                buttonGoogleDisabled: false,
-                buttonBingDisabled: false
-            })
-        }
+        })
     }
 
     calculateFirst = (page) => {
-        if(page === 1) return 1
+        if (page === 1) return 1
 
         return (page * 10) - 10
     }
@@ -148,81 +89,139 @@ export default class Main extends Component {
         return Number(number).toLocaleString('pt-BR')
     }
 
-    previousPage = async () => {
 
-        if(this.state.search.page === 1) return
+    googleOnClick = async () => {
 
-        this.setState({
-            search: {
-                ...this.state.search,
-                previousDisabled: true,
-                nextDisabled: true
-            }
-        })
+        const keyword = this.state.keyword
 
-        const first = this.calculateFirst(this.state.search.page -1)
-
-        const response = await api.get(`/search?keyword=${this.state.search.keyword}&engine=${this.state.search.engine}&first=${first}`)
-
-        if(response.status === 200 || response.status === 204){
-
-            this.setState({
-                search: {
-                    ...this.state.search,
-                    results: response.data.titlesAndLinks,
-                    page: this.state.search.page -1
-                }
-            })
-
-        }else{
+        if (keyword === '') {
             this.resetSearch()
         }
+        else {
 
-        this.setState({
-            search: {
-                ...this.state.search,
-                previousDisabled: false,
-                nextDisabled: false
+            this.setSearchButtonsDisabledStatus(true)
+
+            try {
+
+                const response = await api.get(`/search?keyword=${this.state.keyword}&engine=google&first=1`)
+
+                if (response.status === 200 || response.status === 204) {
+
+                    this.setState({
+                        search: {
+                            keyword,
+                            engine: 'google',
+                            count: response.status === 200 ? response.data.resultStat : 0,
+                            results: response.data.titlesAndLinks,
+                            page: 1
+                        }
+                    })
+
+                } else {
+                    this.resetSearch()
+                }
+
             }
-        })
+            finally {
+                this.setSearchButtonsDisabledStatus(false)
+            }
+        }
+    }
+
+    bingOnClick = async () => {
+
+        const keyword = this.state.keyword
+
+        if (keyword === '') {
+            this.resetSearch()
+        }
+        else {
+
+            this.setSearchButtonsDisabledStatus(true)
+
+            try {
+                const response = await api.get(`/search?keyword=${this.state.keyword}&engine=bing&first=1`)
+
+                if (response.status === 200 || response.status === 204) {
+
+                    this.setState({
+                        search: {
+                            keyword,
+                            engine: 'bing',
+                            count: response.status === 200 ? response.data.resultStat : 0,
+                            results: response.data.titlesAndLinks,
+                            page: 1
+                        }
+                    })
+
+                } else {
+                    this.resetSearch()
+                }
+            }
+            finally {
+                this.setSearchButtonsDisabledStatus(false)
+            }
+        }
+    }
+
+    previousPage = async () => {
+
+        if (this.state.search.page === 1) return
+
+        this.setActionButtonsDisabledStatus(true)
+
+        try {
+            const first = this.calculateFirst(this.state.search.page - 1)
+
+            const response = await api.get(`/search?keyword=${this.state.search.keyword}&engine=${this.state.search.engine}&first=${first}`)
+
+            if (response.status === 200 || response.status === 204) {
+
+                this.setState({
+                    search: {
+                        ...this.state.search,
+                        results: response.data.titlesAndLinks,
+                        page: this.state.search.page - 1
+                    }
+                })
+
+            } else {
+                this.resetSearch()
+            }
+        }
+        finally {
+            this.setActionButtonsDisabledStatus(false)
+        }
     }
 
     nextPage = async () => {
-        if(this.state.search.page >= this.calculateMaxPage()) return
+        if (this.state.search.page >= this.calculateMaxPage()) return
 
-        this.setState({
-            search: {
-                ...this.state.search,
-                previousDisabled: true,
-                nextDisabled: true
+        this.setActionButtonsDisabledStatus(true)
+
+        try {
+
+            const first = this.calculateFirst(this.state.search.page + 1)
+
+            const response = await api.get(`/search?keyword=${this.state.search.keyword}&engine=${this.state.search.engine}&first=${first}`)
+
+            if (response.status === 200 || response.status === 204) {
+
+                this.setState({
+                    search: {
+                        ...this.state.search,
+                        results: response.data.titlesAndLinks,
+                        page: this.state.search.page + 1
+                    }
+                })
+
+            } else {
+                this.resetSearch()
             }
-        })
-
-        const first = this.calculateFirst(this.state.search.page + 1)
-
-        const response = await api.get(`/search?keyword=${this.state.search.keyword}&engine=${this.state.search.engine}&first=${first}`)
-
-        if(response.status === 200 || response.status === 204){
-
-            this.setState({
-                search: {
-                    ...this.state.search,
-                    results: response.data.titlesAndLinks,
-                    page: this.state.search.page +1
-                }
-            })
-
-        }else{
-            this.resetSearch()
         }
-
-        this.setState({
-            search: {
-                ...this.state.search,
-                previousDisabled: false,
-                nextDisabled: false
-            }
-        })
+        finally{
+            this.setActionButtonsDisabledStatus(false)
+        }
     }
 
     render() {
@@ -250,27 +249,27 @@ export default class Main extends Component {
                             <h3>Não há resultados para '{this.state.search.keyword}' em {this.state.search.engine}</h3>
 
                         ) : (
-                            <div>
-                                <h3>Mostrando resultados para {this.state.search.keyword} em {this.state.search.engine}</h3>
-                                <h6>Aproximadamente {this.getBrLocaleNumber(this.state.search.count)} resultados</h6> 
+                                <div>
+                                    <h3>Mostrando resultados para {this.state.search.keyword} em {this.state.search.engine}</h3>
+                                    <h6>Aproximadamente {this.getBrLocaleNumber(this.state.search.count)} resultados</h6>
 
-                                {this.state.search.results.map((result, index) => {
-                                    return (
-                                        <article key={index}>                                        
-                                            <strong>{result.title}</strong>                                        
-                                            <a href={result.link} target="_blank" rel="noopener noreferrer">Acessar</a>
-                                        </article>
-                                    )
-                                })}
+                                    {this.state.search.results.map((result, index) => {
+                                        return (
+                                            <article key={index}>
+                                                <strong>{result.title}</strong>
+                                                <a href={result.link} target="_blank" rel="noopener noreferrer">Acessar</a>
+                                            </article>
+                                        )
+                                    })}
 
-                                <div className="actions">
-                                    <button disabled={this.state.search.previousDisabled} onClick={this.previousPage}>Anterior</button>
-                                    <span>Pagina atual: {this.state.search.page}</span>
-                                    <button disabled={this.state.search.nextDisabled} onClick={this.nextPage}>Proxima</button>   
+                                    <div className="actions">
+                                        <button disabled={this.state.search.previousDisabled} onClick={this.previousPage}>Anterior</button>
+                                        <span>Pagina atual: {this.state.search.page}</span>
+                                        <button disabled={this.state.search.nextDisabled} onClick={this.nextPage}>Proxima</button>
+                                    </div>
+
                                 </div>
-
-                            </div>
-                        ) }                      
+                            )}
 
                     </div>
                 ) : null}
