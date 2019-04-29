@@ -16,7 +16,7 @@ module.exports = {
 
                 const data = await bingService.search(keyword, first)
 
-                return data !== undefined ? res.status(200).sendData(data) : res.sendStatus(204)
+                return (data.titlesAndLinks !== undefined && data.resultStat !== 0) ? res.status(200).sendData(data) : res.sendStatus(204)
             }
 
             else if (engine === 'google') {

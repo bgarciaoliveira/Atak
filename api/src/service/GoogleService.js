@@ -18,7 +18,10 @@ module.exports = {
             },
 
         }).then(response => {
-            return googleScrapping.getTitlesAndLinks(response.data)
+            return {
+                titlesAndLinks: googleScrapping.getTitlesAndLinks(response.data),
+                resultStat: googleScrapping.getResultStat(response.data)          
+            }
         })
     }
 }

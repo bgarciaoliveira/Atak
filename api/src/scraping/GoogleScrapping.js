@@ -26,5 +26,30 @@ module.exports = {
 
             return arr
         }        
+    },
+
+    getResultStat: htmlData => {
+        // Iremos pegar a quantidade de resultados
+        // Ficam dentro da div "resultStats"
+
+        const data = htmlData.match(/<div id="resultStats">(.*?)<\/div>/gi)
+
+        if(data !== null){
+
+            const dataStr = data.join().toLowerCase()
+
+            if(dataStr.includes('aproximadamente')){
+                
+                const stat = parseInt(dataStr.substring(
+                    dataStr.lastIndexOf("aproximadamente") + 'aproximadamente'.length + 1, 
+                    dataStr.lastIndexOf("resultados") - 1
+                ).replace(/\./g, ''))
+                
+                return stat
+
+            }
+        }
+
+        return 0
     }
 }
