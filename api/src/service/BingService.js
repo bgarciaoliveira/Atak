@@ -12,8 +12,11 @@ module.exports = {
             url: `https://www.bing.com/search?q=${normalizedKeyword}&first=${first}`,
 
         }).then(response => {
-
-            return bingScrapping.getTitlesAndLinks(response.data)
+            
+            return {
+                titlesAndLinks: bingScrapping.getTitlesAndLinks(response.data),
+                resultStat: bingScrapping.getResultStat(response.data)          
+            }
         })
     }
 }

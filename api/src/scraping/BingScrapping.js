@@ -28,5 +28,23 @@ module.exports = {
 
             return arr
         }        
+    },
+
+    getResultStat: htmlData => {
+        // Iremos pegar a quantidade de resultados
+        // Ficam dentro da span "sb_count"
+
+        const data = htmlData.match(/<span class="sb_count">(.*?)<\/span>/gi)
+
+        if(data !== null){
+
+            const dataStr = data.join().toLowerCase()
+
+            return parseInt(
+                dataStr.replace(/<span(.*?)>/gi, '').replace(' resultados</span>', '').replace(/\./g, '')
+            )
+        }
+
+        return 0
     }
 }

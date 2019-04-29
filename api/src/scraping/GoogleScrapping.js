@@ -40,13 +40,12 @@ module.exports = {
 
             if(dataStr.includes('aproximadamente')){
                 
-                const stat = parseInt(dataStr.substring(
-                    dataStr.lastIndexOf("aproximadamente") + 'aproximadamente'.length + 1, 
-                    dataStr.lastIndexOf("resultados") - 1
-                ).replace(/\./g, ''))
-                
-                return stat
-
+                return parseInt(
+                    dataStr.substring(
+                        dataStr.lastIndexOf("aproximadamente") + 'aproximadamente'.length + 1, 
+                        dataStr.lastIndexOf("resultados") - 1
+                    ).replace(/\./g, '')
+                )
             }
         }
 
