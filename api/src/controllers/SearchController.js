@@ -1,5 +1,6 @@
 const bingService = require('../service/BingService')
 const googleService = require('../service/GoogleService')
+const askService = require('../service/AskService')
 const isNaturalNumber = require('../utils/isNaturalNumber')
 
 module.exports = {
@@ -19,9 +20,16 @@ module.exports = {
                 return (data.titlesAndLinks !== undefined && data.resultStat !== 0) ? res.status(200).sendData(data) : res.sendStatus(204)
             }
 
-            else if (engine === 'google') {
+            if (engine === 'google') {
 
                 const data = await googleService.search(keyword, first)
+
+                return (data.titlesAndLinks !== undefined && data.resultStat !== 0) ? res.status(200).sendData(data) : res.sendStatus(204)
+            }
+
+            if (engine === 'ask') {
+
+                const data = await askService.search(keyword, first)
 
                 return (data.titlesAndLinks !== undefined && data.resultStat !== 0) ? res.status(200).sendData(data) : res.sendStatus(204)
             }
