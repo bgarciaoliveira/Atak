@@ -13,6 +13,7 @@ export default class Main extends Component {
 
         buttonGoogleDisabled: false,
         buttonBingDisabled: false,
+        buttonAskDisabled: false,
 
         search: {
 
@@ -46,6 +47,7 @@ export default class Main extends Component {
         this.setState({
             buttonGoogleDisabled: false,
             buttonBingDisabled: false,
+            buttonAskDisabled: false,
             search: {
                 keyword: '',
                 engine: '',
@@ -61,7 +63,8 @@ export default class Main extends Component {
     setSearchButtonsDisabledStatus = (status) => {
         this.setState({
             buttonGoogleDisabled: status,
-            buttonBingDisabled: status
+            buttonBingDisabled: status,
+            buttonAskDisabled: status,
         })
     }
 
@@ -164,6 +167,42 @@ export default class Main extends Component {
         }
     }
 
+    askgOnClick = async () => {
+
+        const keyword = this.state.keyword
+
+        if (keyword === '') {
+            this.resetSearch()
+        }
+        else {
+
+            this.setSearchButtonsDisabledStatus(true)
+
+            try {
+                const response = await api.get(`/search?keyword=${this.state.keyword}&engine=ask&first=1`)
+
+                if (response.status === 200 || response.status === 204) {
+
+                    this.setState({
+                        search: {
+                            keyword,
+                            engine: 'ask',
+                            count: response.status === 200 ? response.data.resultStat : 0,
+                            results: response.data.titlesAndLinks,
+                            page: 1
+                        }
+                    })
+
+                } else {
+                    this.resetSearch()
+                }
+            }
+            finally {
+                this.setSearchButtonsDisabledStatus(false)
+            }
+        }
+    }
+
     previousPage = async () => {
 
         if (this.state.search.page === 1) return
@@ -245,6 +284,7 @@ export default class Main extends Component {
                             <div className="button-box">
                                 <input type="button" disabled={this.state.buttonGoogleDisabled} className="google-button" value="Google" onClick={this.googleOnClick} />
                                 <input type="button" disabled={this.state.buttonBingDisabled} className="bing-button" value="Bing!" onClick={this.bingOnClick} />
+                                <input type="button" disabled={this.state.buttonAskDisabled} className="ask-button" value="Ask" onClick={this.askgOnClick} />
                             </div>
                         </form>
                     </div>

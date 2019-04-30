@@ -1,3 +1,4 @@
+const fixHtmlSpecialEntities = require('../utils/fixHtmlSpecialEntities')
 
 module.exports = {
 
@@ -6,7 +7,6 @@ module.exports = {
         htmlData = htmlData.replace(/\n|\t/g, ' ')
 
         const targetSections = htmlData.match(/<a class="PartialSearchResults(.*?)<\/a>/gi)
-
 
         if(targetSections !== null){
 
@@ -29,7 +29,7 @@ module.exports = {
 
                     //Montagem do array de retorno            
                     arr.push({
-                        title: stripedData[1].trimLeft(),
+                        title: fixHtmlSpecialEntities(stripedData[1].trimLeft()),
                         link: stripedData[0]
                     })            
 
@@ -41,6 +41,8 @@ module.exports = {
     },
 
     getResultStat: htmlData => {
-        return 0
+        //O ask nao fornece a quantidade de resultados
+        //ResultStat ficticio
+        return 10000 + Math.floor((Math.random() * 100000) + 1)
     }
 }
