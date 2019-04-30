@@ -26,6 +26,11 @@
     margin-top: 15px;
 }
 
+.search-box .content .button-box .loading{
+    display: inline-block;
+    float: right;
+}
+
 .search-box .content .button-box input{
     margin-right: 15px;
     height: 35px;

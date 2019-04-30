@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import ReactLoading from 'react-loading';
 import api from '../../services/api'
 
 import './styles.css'
@@ -14,6 +14,7 @@ export default class Main extends Component {
         buttonGoogleDisabled: false,
         buttonBingDisabled: false,
         buttonAskDisabled: false,
+        loadingVisible: false,
 
         search: {
 
@@ -48,6 +49,7 @@ export default class Main extends Component {
             buttonGoogleDisabled: false,
             buttonBingDisabled: false,
             buttonAskDisabled: false,
+            loadingVisible: false,
             search: {
                 keyword: '',
                 engine: '',
@@ -65,6 +67,8 @@ export default class Main extends Component {
             buttonGoogleDisabled: status,
             buttonBingDisabled: status,
             buttonAskDisabled: status,
+            loadingVisible: status === true,
+
         })
     }
 
@@ -285,6 +289,10 @@ export default class Main extends Component {
                                 <input type="button" disabled={this.state.buttonGoogleDisabled} className="google-button" value="Google" onClick={this.googleOnClick} />
                                 <input type="button" disabled={this.state.buttonBingDisabled} className="bing-button" value="Bing!" onClick={this.bingOnClick} />
                                 <input type="button" disabled={this.state.buttonAskDisabled} className="ask-button" value="Ask" onClick={this.askgOnClick} />
+                                    
+                                
+                                {this.state.loadingVisible ? (<ReactLoading className={"loading"} type={"spin"} height={25} width={25} color={"#9e9e9e"} />) : null}
+                                
                             </div>
                         </form>
                     </div>
