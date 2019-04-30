@@ -1,3 +1,4 @@
+const fixHtmlSpecialEntities = require('../utils/fixHtmlSpecialEntities')
 
 module.exports = {
     
@@ -14,7 +15,7 @@ module.exports = {
 
             data.forEach(element => {
                 //Extracao do titulo e link de cada resultado
-                let title = element.match(/<h3 class=(.*?)>(.*?)<\/h3>/gi).join().replace(/<h3 (.*?)>/, '').replace('</h3>', '')
+                let title = fixHtmlSpecialEntities(element.match(/<h3 class=(.*?)>(.*?)<\/h3>/gi).join().replace(/<h3 (.*?)>/, '').replace('</h3>', ''))
                 let link = element.match(/<a(.*?)"(.*?)"/gi).join().replace(/<a(.*?)"/gi, '').replace('"', '')
 
                 //Montagem do array de retorno            
