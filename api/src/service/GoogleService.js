@@ -9,7 +9,7 @@ module.exports = {
 
         return axios({
             method: 'get',
-            url: `https://www.google.com.br/search?q=${normalizedKeyword}&oq=${normalizedKeyword}&ie=UTF-8&start=${first}`,
+            url: `https://www.google.com.br/search?q=${normalizedKeyword}&oq=${normalizedKeyword}&ie=UTF-8&start=${first}&filter=0`,
 
             headers: {
                 'Accept-Charset': 'utf-8',

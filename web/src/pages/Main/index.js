@@ -160,7 +160,7 @@ export default class Main extends Component {
     }
 
     nextPage = async () => {
-        if (this.state.search.page >= this.calculateMaxPage()) return
+        if (this.state.search.page > this.calculateMaxPage()) return
 
         this.setActionButtonsDisabledStatus(true)
 
