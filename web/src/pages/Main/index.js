@@ -96,46 +96,7 @@ export default class Main extends Component {
         return Number(number).toLocaleString('pt-BR')
     }
 
-
-    googleOnClick = async () => {
-
-        const keyword = this.state.keyword
-
-        if (keyword === '') {
-            this.resetSearch()
-        }
-        else {
-
-            this.setSearchButtonsDisabledStatus(true)
-
-            try {
-
-                const response = await api.get(`/search?keyword=${this.state.keyword}&engine=google&first=1`)
-
-                if (response.status === 200 || response.status === 204) {
-
-                    this.setState({
-                        search: {
-                            keyword,
-                            engine: 'google',
-                            count: response.status === 200 ? response.data.resultStat : 0,
-                            results: response.data.titlesAndLinks,
-                            page: 1
-                        }
-                    })
-
-                } else {
-                    this.resetSearch()
-                }
-
-            }
-            finally {
-                this.setSearchButtonsDisabledStatus(false)
-            }
-        }
-    }
-
-    bingOnClick = async () => {
+    buttonSearchOnClick = async (engine) =>{
 
         const keyword = this.state.keyword
 
@@ -146,62 +107,23 @@ export default class Main extends Component {
 
             this.setSearchButtonsDisabledStatus(true)
 
-            try {
-                const response = await api.get(`/search?keyword=${this.state.keyword}&engine=bing&first=1`)
+            try{
+                const response = await api.get(`/search?keyword=${this.state.keyword}&engine=${engine}&first=1`)
 
                 if (response.status === 200 || response.status === 204) {
 
                     this.setState({
                         search: {
                             keyword,
-                            engine: 'bing',
+                            engine: engine,
                             count: response.status === 200 ? response.data.resultStat : 0,
                             results: response.data.titlesAndLinks,
                             page: 1
                         }
                     })
-
-                } else {
-                    this.resetSearch()
                 }
             }
-            finally {
-                this.setSearchButtonsDisabledStatus(false)
-            }
-        }
-    }
-
-    askgOnClick = async () => {
-
-        const keyword = this.state.keyword
-
-        if (keyword === '') {
-            this.resetSearch()
-        }
-        else {
-
-            this.setSearchButtonsDisabledStatus(true)
-
-            try {
-                const response = await api.get(`/search?keyword=${this.state.keyword}&engine=ask&first=1`)
-
-                if (response.status === 200 || response.status === 204) {
-
-                    this.setState({
-                        search: {
-                            keyword,
-                            engine: 'ask',
-                            count: response.status === 200 ? response.data.resultStat : 0,
-                            results: response.data.titlesAndLinks,
-                            page: 1
-                        }
-                    })
-
-                } else {
-                    this.resetSearch()
-                }
-            }
-            finally {
+            finally{
                 this.setSearchButtonsDisabledStatus(false)
             }
         }
@@ -280,16 +202,15 @@ export default class Main extends Component {
                             onKeyPress={e => { 
                                 if (e.key === 'Enter') {
                                     e.preventDefault()
-                                    this.googleOnClick()
+                                    this.buttonSearchOnClick('google')
                                 }
                             }}
                             />
 
                             <div className="button-box">
-                                <input type="button" disabled={this.state.buttonGoogleDisabled} className="google-button" value="Google" onClick={this.googleOnClick} />
-                                <input type="button" disabled={this.state.buttonBingDisabled} className="bing-button" value="Bing!" onClick={this.bingOnClick} />
-                                <input type="button" disabled={this.state.buttonAskDisabled} className="ask-button" value="Ask" onClick={this.askgOnClick} />
-                                    
+                                <input type="button" disabled={this.state.buttonGoogleDisabled} className="google-button" value="Google" onClick={() => this.buttonSearchOnClick('google')} />
+                                <input type="button" disabled={this.state.buttonBingDisabled} className="bing-button" value="Bing!" onClick={() => this.buttonSearchOnClick('bing')} />
+                                <input type="button" disabled={this.state.buttonAskDisabled} className="ask-button" value="Ask" onClick={() => this.buttonSearchOnClick('ask')} />
                                 
                                 {this.state.loadingVisible ? (<ReactLoading className={"loading"} type={"spin"} height={25} width={25} color={"#9e9e9e"} />) : null}
                                 

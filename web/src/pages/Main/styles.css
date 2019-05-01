@@ -42,10 +42,6 @@
     width: 100px;
 }
 
-.search-box .content .button-box input:hover{
-    opacity: 0.85;
-}
-
 .search-box .content .google-button{
     background: #4285F4;
 }
@@ -56,6 +52,10 @@
 
 .search-box .content .ask-button{
     background: #CF0000;
+}
+
+.search-box .content .button-box input:hover{
+    opacity: 0.85;
 }
 
 .result-box{
