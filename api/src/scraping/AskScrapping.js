@@ -43,6 +43,6 @@ module.exports = {
     getResultStat: htmlData => {
         //O ask nao fornece a quantidade de resultados
         //ResultStat ficticio
-        return 10000 + Math.floor((Math.random() * 100000) + 1)
+        return 10000
     }
 }

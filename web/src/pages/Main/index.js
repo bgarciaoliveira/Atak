@@ -229,7 +229,13 @@ export default class Main extends Component {
                         ) : (
                                 <div>
                                     <h3>Mostrando resultados para <span className="text-orange">{this.state.search.keyword}</span> em <span className="text-orange">{this.state.search.engine}</span></h3>
-                                    <h6>Aproximadamente {this.getBrLocaleNumber(this.state.search.count)} resultados</h6>
+
+                                    {this.state.search.engine !== 'ask' ? (
+                                        <h6>Aproximadamente {this.getBrLocaleNumber(this.state.search.count)} resultados</h6>
+                                    ) : (
+                                        <h6>Não há informações sobre a quantidade de resultados</h6>                                        
+                                    )}
+                                    
 
                                     {this.state.search.results.map((result, index) => {
                                         return (
@@ -241,9 +247,16 @@ export default class Main extends Component {
                                     })}
 
                                     <div className="actions">
-                                        <button disabled={this.state.search.previousDisabled} onClick={this.previousPage}>Anterior</button>
+                                        {this.state.search.page !== 1 ? (
+                                            <button disabled={this.state.search.previousDisabled} onClick={this.previousPage}>Anterior</button>
+                                        ) : null}
+                                        
                                         <span>Pagina atual: {this.state.search.page}</span>
-                                        <button disabled={this.state.search.nextDisabled} onClick={this.nextPage}>Proxima</button>
+
+                                        {this.state.search.page <= this.calculateMaxPage() ? (
+                                            <button disabled={this.state.search.nextDisabled} onClick={this.nextPage}>Proxima</button>
+                                        ) : null}
+                                        
                                     </div>
 
                                 </div>
